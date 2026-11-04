@@ -61,6 +61,28 @@ class PlayerTest {
         assertThrows(IllegalStateException.class, () -> cpu.makeMove(board));
     }
 
+    /** Verifies default player names, valid name updates, and rejection of null or blank names. */
+    @Test
+    void playerNameGetterAndSetterWorkAndValidateInput() {
+        HumanPlayer human = new HumanPlayer('X', new Scanner(""));
+        CpuPlayer cpu = new CpuPlayer('O');
+
+        assertEquals("Player #1", human.getName());
+        assertEquals("CPU #1", cpu.getName());
+
+        human.setName("Alice");
+        assertEquals("Alice", human.getName());
+
+        cpu.setName("DeepBlue");
+        assertEquals("DeepBlue", cpu.getName());
+
+        assertThrows(IllegalArgumentException.class, () -> human.setName(null));
+        assertThrows(IllegalArgumentException.class, () -> human.setName(""));
+        assertThrows(IllegalArgumentException.class, () -> human.setName("   \t\n "));
+        assertThrows(IllegalArgumentException.class, () -> cpu.setName(null));
+        assertThrows(IllegalArgumentException.class, () -> cpu.setName("   "));
+    }
+
     /** Counts the occurrences of a marker on the supplied board. */
     private int countMarker(Board board, char marker) {
         int count = 0;
