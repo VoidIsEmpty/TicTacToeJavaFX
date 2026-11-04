@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 
  * A player that chooses randomly from the currently available cells. 
  */
 public class CpuPlayer extends Player {
+    private static final AtomicInteger CPU_COUNT = new AtomicInteger();
     private final Random random;
 
     /**
@@ -38,6 +40,7 @@ public class CpuPlayer extends Player {
     public CpuPlayer(char marker, Random random) {
         super(marker);
         this.random = Objects.requireNonNull(random, "random");
+        setName("CPU #" + CPU_COUNT.incrementAndGet());
     }
     
 

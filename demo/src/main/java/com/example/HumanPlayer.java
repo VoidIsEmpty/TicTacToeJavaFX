@@ -2,12 +2,14 @@ package com.example;
 
 import java.util.Objects;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 
  * /** A player who chooses moves by entering coordinates in the console. 
  */
 public class HumanPlayer extends Player {
+    private static final AtomicInteger PLAYER_COUNT = new AtomicInteger();
     private final Scanner scanner;
 
     /**
@@ -21,6 +23,7 @@ public class HumanPlayer extends Player {
     public HumanPlayer(char marker, Scanner scanner) {
         super(marker);
         this.scanner = Objects.requireNonNull(scanner, "scanner");
+        setName("Player #" + PLAYER_COUNT.incrementAndGet());
     }
 
     /** Prompts for coordinates until this player's marker is placed successfully. */
