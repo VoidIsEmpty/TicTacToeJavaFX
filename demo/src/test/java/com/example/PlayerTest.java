@@ -7,10 +7,57 @@ import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import java.util.Scanner;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 /** Unit tests for human and CPU player move behavior. */
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class PlayerTest {
+
+    /** Verifies two human players receive default names "Player #1" and "Player #2". */
+    @Test
+    @Order(1)
+    void multipleHumanPlayersHaveSequentialDefaultNames() {
+        HumanPlayer human1 = new HumanPlayer('X', new Scanner(""));
+        HumanPlayer human2 = new HumanPlayer('O', new Scanner(""));
+
+        assertEquals("Player #1", human1.getName());
+        assertEquals("Player #2", human2.getName());
+    }
+
+    /** Verifies two CPU players receive default names "CPU #1" and "CPU #2". */
+    @Test
+    @Order(2)
+    void multipleCpuPlayersHaveSequentialDefaultNames() {
+        CpuPlayer cpu1 = new CpuPlayer('X');
+        CpuPlayer cpu2 = new CpuPlayer('O');
+
+        assertEquals("CPU #1", cpu1.getName());
+        assertEquals("CPU #2", cpu2.getName());
+    }
+
+    /** Verifies valid name updates and rejection of null or blank names. */
+    @Test
+    @Order(3)
+    void playerNameGetterAndSetterWorkAndValidateInput() {
+        HumanPlayer human = new HumanPlayer('X', new Scanner(""));
+        CpuPlayer cpu = new CpuPlayer('O');
+
+        human.setName("Alice");
+        assertEquals("Alice", human.getName());
+
+        cpu.setName("DeepBlue");
+        assertEquals("DeepBlue", cpu.getName());
+
+        assertThrows(IllegalArgumentException.class, () -> human.setName(null));
+        assertThrows(IllegalArgumentException.class, () -> human.setName(""));
+        assertThrows(IllegalArgumentException.class, () -> human.setName("   \t\n "));
+        assertThrows(IllegalArgumentException.class, () -> cpu.setName(null));
+        assertThrows(IllegalArgumentException.class, () -> cpu.setName("   "));
+    }
+
     /** Verifies a human can place a marker at valid coordinates. */
     @Test
     void humanCanPlaceAMoveFromSelectedCoordinates() {
@@ -59,28 +106,6 @@ class PlayerTest {
             }
         }
         assertThrows(IllegalStateException.class, () -> cpu.makeMove(board));
-    }
-
-    /** Verifies default player names, valid name updates, and rejection of null or blank names. */
-    @Test
-    void playerNameGetterAndSetterWorkAndValidateInput() {
-        HumanPlayer human = new HumanPlayer('X', new Scanner(""));
-        CpuPlayer cpu = new CpuPlayer('O');
-
-        assertEquals("Player #1", human.getName());
-        assertEquals("CPU #1", cpu.getName());
-
-        human.setName("Alice");
-        assertEquals("Alice", human.getName());
-
-        cpu.setName("DeepBlue");
-        assertEquals("DeepBlue", cpu.getName());
-
-        assertThrows(IllegalArgumentException.class, () -> human.setName(null));
-        assertThrows(IllegalArgumentException.class, () -> human.setName(""));
-        assertThrows(IllegalArgumentException.class, () -> human.setName("   \t\n "));
-        assertThrows(IllegalArgumentException.class, () -> cpu.setName(null));
-        assertThrows(IllegalArgumentException.class, () -> cpu.setName("   "));
     }
 
     /** Counts the occurrences of a marker on the supplied board. */
